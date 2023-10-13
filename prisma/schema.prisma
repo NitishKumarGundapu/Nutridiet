@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime? @db.Date
+  email          String?   @unique
+  hashedPassword String?
+  name           String?
+  updatedAt      DateTime? @db.Date
+
+  accounts Account[]
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model NutritionFacts {
+  id                  String @id @default(auto()) @map("_id") @db.ObjectId
+  caffeine            Int
+  calcium             Int
+  calories            Int
+  carbohydrates       Int
+  cholesterol         Int
+  fiber               Int
+  /// Multiple data types found: Float: 77.7%, Int: 22.3% out of 1000 sampled entries
+  folate              Json
+  /// Multiple data types found: Float: 14%, Int: 86% out of 1000 sampled entries
+  folic_acid          Json
+  /// Multiple data types found: Float: 92%, Int: 8% out of 1000 sampled entries
+  iron                Json
+  magnesium           Int
+  monounsaturated_fat Int
+  name                String
+  /// Multiple data types found: Float: 86.9%, Int: 13.1% out of 1000 sampled entries
+  niacin              Json
+  /// Multiple data types found: Float: 71.4%, Int: 28.6% out of 1000 sampled entries
+  pantothenic_acid    Json
+  polyunsaturated_fat Int
+  potassium           Int
+  protein             Int
+  /// Multiple data types found: Float: 89.2%, Int: 10.8% out of 1000 sampled entries
+  riboflavin          Json
+  saturated_fat       Int
+  serving_size        Int
+  sodium              Int
+  sugars              Int
+  /// Multiple data types found: Float: 88.8%, Int: 11.2% out of 1000 sampled entries
+  thiamin             Json
+  total_fat           Int
+  trans_fat           Int
+  /// Multiple data types found: Float: 67.6%, Int: 32.4% out of 1000 sampled entries
+  vitamin_a           Json
+  /// Multiple data types found: Float: 55.1%, Int: 44.9% out of 1000 sampled entries
+  vitamin_b12         Json
+  /// Multiple data types found: Float: 84.9%, Int: 15.1% out of 1000 sampled entries
+  vitamin_b6          Json
+  /// Multiple data types found: Float: 33.7%, Int: 66.3% out of 1000 sampled entries
+  vitamin_c           Json
+  /// Multiple data types found: Float: 28.5%, Int: 71.5% out of 1000 sampled entries
+  vitamin_d           Json
+  /// Multiple data types found: Float: 60.5%, Int: 39.5% out of 1000 sampled entries
+  vitamin_e           Json
+  /// Multiple data types found: Float: 47.4%, Int: 52.6% out of 1000 sampled entries
+  vitamin_k           Json
+  water               Int
+  /// Multiple data types found: Float: 87.5%, Int: 12.5% out of 1000 sampled entries
+  zinc                Json
+}
